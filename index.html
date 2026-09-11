@@ -1,8 +1,266 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-  <head>
+<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>黛玉徒弟 - Main Page</title>
     <style>
-      body {             margin: 0;             padding: 0;             background-color: #1e90ff;             font-family: 'Microsoft YaHei', sans-serif;             height: 100vh;             display: flex;             justify-content: center;             align-items: center;             position: relative;         }          .container {             text-align: center;             background: rgba(255, 255, 255, 0.1);             padding: 40px;             border-radius: 15px;             box-shadow: 0 4px 15px rgba(0,0,0,0.2);             width: 90%;             max-width: 500px;         }          h1 {             color: white;             margin-bottom: 30px;             text-shadow: 1px 1px 3px rgba(0,0,0,0.2);         }          .btn {             display: block;             width: 250px;             margin: 15px auto;             padding: 15px 0;             text-decoration: none;             color: white;             font-size: 18px;             font-weight: bold;             border: 2px solid white;             border-radius: 8px;             transition: all 0.3s ease;             background-color: transparent;             cursor: pointer;             font-family: 'Microsoft YaHei', sans-serif;         }          .btn:hover {             background-color: white;             color: #1e90ff;             transform: translateY(-3px);             box-shadow: 0 5px 15px rgba(0,0,0,0.2);         }          footer {             background-color: #333333;             color: #ffffff;             text-align: center;             padding: 15px 0;             font-size: 14px;             position: fixed;             bottom: 0;             width: 100%;             font-family: 'Microsoft YaHei', sans-serif;         }          /* 提示条 */         #toast {             position: fixed;             left: 50%;             top: 50%;             transform: translate(-50%, -50%) scale(0.9);             background: rgba(0, 0, 0, 0.8);             color: #fff;             padding: 14px 28px;             border-radius: 10px;             font-size: 17px;             opacity: 0;             pointer-events: none;             transition: opacity 0.25s ease, transform 0.25s ease;             z-index: 999;             white-space: nowrap;         }          #toast.show {             opacity: 1;             transform: translate(-50%, -50%) scale(1);         }          @media (max-width: 600px) {             .btn {                 width: 100%;                 max-width: 250px;             }         }     </style>      <script>     (function() {         try {             var link = document.createElement('link');             link.rel = 'icon';             link.type = 'image/png';             link.href = 'tubiao.png';             document.head.appendChild(link);              var appleLink = document.createElement('link');             appleLink.rel = 'apple-touch-icon';             appleLink.href = 'tubiao.png';             document.head.appendChild(appleLink);         } catch(e) {             console.log('favicon 加载失败:', e);         }     })();     </script> </head> <body>      <div class="container">         <h1>Daiyu's disciple</h1>          <button class="btn" data-name="五子棋">五子棋</button>          <button class="btn" data-name="转盘">转盘</button>     </div>      <div id="toast"></div>      <footer>         © 黛玉徒弟拥有最终解释权与所有权/网站由太空杀124搭建。     </footer>      <script>         var toastTimer = null;          function showToast(msg) {             var toast = document.getElementById('toast');             toast.textContent = msg;             toast.classList.add('show');              clearTimeout(toastTimer);             toastTimer = setTimeout(function() {                 toast.classList.remove('show');             }, 2000);         }          document.querySelectorAll('.btn').forEach(function(btn) {             btn.addEventListener('click', function() {                 showToast(this.getAttribute('data-name') + ' 暂未完工');             });         });     </script>  </body> </html>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #1e90ff;
+            font-family: 'Microsoft YaHei', sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .container {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            width: 90%;
+            max-width: 500px;
+        }
+
+        h1 {
+            color: white;
+            margin-bottom: 30px;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+        }
+
+        .btn {
+            display: block;
+            width: 250px;
+            margin: 15px auto;
+            padding: 15px 0;
+            text-decoration: none;
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            border: 2px solid white;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            background-color: transparent;
+            cursor: pointer;
+            font-family: 'Microsoft YaHei', sans-serif;
+        }
+
+        .btn:hover {
+            background-color: white;
+            color: #1e90ff;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        footer {
+            background-color: #333333;
+            color: #ffffff;
+            text-align: center;
+            padding: 15px 0;
+            font-size: 14px;
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            font-family: 'Microsoft YaHei', sans-serif;
+        }
+
+        #toast {
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -50%) scale(0.9);
+            background: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            padding: 14px 28px;
+            border-radius: 10px;
+            font-size: 17px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease, transform 0.25s ease;
+            z-index: 999;
+            white-space: nowrap;
+        }
+
+        #toast.show {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+
+        /* ===== 续费提醒弹窗 ===== */
+        .notice-mask {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.45);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+            z-index: 1000;
+        }
+
+        .notice-mask.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .notice-box {
+            background: #ffffff;
+            border-radius: 14px;
+            padding: 26px 24px 20px;
+            width: 100%;
+            max-width: 360px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transform: translateY(20px) scale(0.96);
+            transition: transform 0.25s ease;
+        }
+
+        .notice-mask.show .notice-box {
+            transform: translateY(0) scale(1);
+        }
+
+        .notice-title {
+            margin: 0 0 12px;
+            font-size: 19px;
+            font-weight: bold;
+            color: #1e90ff;
+        }
+
+        .notice-text {
+            margin: 0 0 22px;
+            font-size: 16px;
+            line-height: 1.7;
+            color: #333333;
+        }
+
+        .notice-btn {
+            width: 100%;
+            padding: 12px 0;
+            border: none;
+            border-radius: 8px;
+            background: #1e90ff;
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: bold;
+            font-family: 'Microsoft YaHei', sans-serif;
+            cursor: pointer;
+            transition: background 0.25s ease;
+        }
+
+        .notice-btn:hover {
+            background: #1873cc;
+        }
+
+        @media (max-width: 600px) {
+            .btn {
+                width: 100%;
+                max-width: 250px;
+            }
+        }
+    </style>
+
+    <script>
+    (function() {
+        try {
+            var link = document.createElement('link');
+            link.rel = 'icon';
+            link.type = 'image/png';
+            link.href = 'tubiao.png';
+            document.head.appendChild(link);
+
+            var appleLink = document.createElement('link');
+            appleLink.rel = 'apple-touch-icon';
+            appleLink.href = 'tubiao.png';
+            document.head.appendChild(appleLink);
+        } catch(e) {
+            console.log('favicon 加载失败:', e);
+        }
+    })();
+    </script>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Daiyu's disciple</h1>
+
+        <button class="btn" data-name="五子棋">五子棋</button>
+
+        <button class="btn" data-name="转盘">转盘</button>
+    </div>
+
+    <div id="toast"></div>
+
+    <div class="notice-mask" id="noticeMask">
+        <div class="notice-box">
+            <h2 class="notice-title">重要提醒</h2>
+            <p class="notice-text">请及时为网站续费，否则网站将于9月14日下架</p>
+            <button class="notice-btn" id="noticeBtn">我知道了</button>
+        </div>
+    </div>
+
+    <footer>
+        © 黛玉徒弟拥有最终解释权与所有权/网站由太空杀124搭建。
+    </footer>
+
+    <script>
+        var toastTimer = null;
+
+        function showToast(msg) {
+            var toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.classList.add('show');
+
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(function() {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+
+        document.querySelectorAll('.btn').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                showToast(this.getAttribute('data-name') + ' 暂未完工');
+            });
+        });
+
+        (function() {
+            var now = new Date();
+            var month = now.getMonth() + 1;
+            var day = now.getDate();
+
+            var isNoticeDay = (month === 9 && (day === 12 || day === 13));
+            if (!isNoticeDay) return;
+
+            var storageKey = 'renewNotice_' + now.getFullYear() + '-' + month + '-' + day;
+
+            try {
+                if (localStorage.getItem(storageKey) === '1') return;
+            } catch (e) {
+            }
+
+            var mask = document.getElementById('noticeMask');
+            var btn = document.getElementById('noticeBtn');
+
+            setTimeout(function() {
+                mask.classList.add('show');
+            }, 300);
+
+            btn.addEventListener('click', function() {
+                mask.classList.remove('show');
+                try {
+                    localStorage.setItem(storageKey, '1');
+                } catch (e) {}
+            });
+        })();
+    </script>
+
+</body>
+</html>
