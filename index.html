@@ -236,7 +236,7 @@
             var month = now.getMonth() + 1;
             var day = now.getDate();
 
-            var isNoticeDay = (month === 9 && (day === 12 || day === 13));
+            var isNoticeDay = (month === 9 && (day === 11 || day === 12));
             if (!isNoticeDay) return;
 
             var storageKey = 'renewNotice_' + now.getFullYear() + '-' + month + '-' + day;
